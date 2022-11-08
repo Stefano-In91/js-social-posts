@@ -61,6 +61,10 @@ const posts = [
   },
 ];
 
+/*-----------
+  FUNZIONI
+-----------*/
+// Formatta data se la prima parte della stringa è l'anno(4cifre)
 function formatDate(string) {
   let formattedString;
   if (string.indexOf("-") === 4 || string.indexOf("/") === 4) {
@@ -71,23 +75,27 @@ function formatDate(string) {
   }
   return formattedString;
 }
-
+// Riempie i post già creati con i dati dell'array oggetti, chiama formattazione date
 function fillPosts(array) {
   for (let i = 0; i < array.length; i++) {
     const element = array[i];
     let authorName = element.author.name;
     document.querySelectorAll(".post-meta__author")[i].innerHTML = authorName;
+
     document.querySelectorAll(".post-meta__time")[i].innerHTML = formatDate(
       element.created
     );
+    // Se trova un elemento mancante nelle immagini, sostituisce con iniziali Nome
     if (element.author.image === null || element.author.image === undefined) {
+      let authorInitials = authorName.substr(0, 1);
+      authorInitials += authorName.substr(authorName.indexOf(" ") + 1, 1);
       let div = document.createElement("div");
       div.classList.add(".profile-pic");
-      div.innerHTML = authorName.substr(0, 1);
-      div.innerHTML += authorName.substr(authorName.indexOf(" ") + 1, 1);
+      div.innerHTML = authorInitials;
       document.querySelectorAll(".post-meta__icon")[i].innerHTML = ``;
       document.querySelectorAll(".post-meta__icon")[i].append(div);
-    } else {
+    } // Altrimenti setta l'innerHTML come da template
+    else {
       document.querySelectorAll(".post-meta__icon")[i].innerHTML = `<img
       class="profile-pic"
       src=${element.author.image}
@@ -101,6 +109,7 @@ function fillPosts(array) {
     document.querySelectorAll(".js-likes-counter")[i].innerHTML = element.likes;
   }
 }
+// Crea post nella pagina clonando il template, chiama la funzione per aggiornarne i dati
 function postPosts(array, destination, template) {
   for (let i = 0; i < array.length; i++) {
     const post = document.importNode(template, true);
@@ -108,7 +117,7 @@ function postPosts(array, destination, template) {
   }
   fillPosts(array);
 }
-
+// Aggiunge event listener sui bottoni della pagina
 function likeCounter(postArray, likeArray) {
   for (let i = 0; i < postArray.length; i++) {
     const element = postArray[i];
@@ -130,6 +139,10 @@ function likeCounter(postArray, likeArray) {
   return likeArray;
 }
 
+/*-----------
+  MAIN
+-----------*/
+// Inizializzazione target e counter, invocazione funzioni
 const postsList = document.querySelector(".posts-list");
 const postTemplate = document.getElementsByTagName("template")[0].content;
 postPosts(posts, postsList, postTemplate);
