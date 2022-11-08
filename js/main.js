@@ -61,20 +61,25 @@ const posts = [
   },
 ];
 
-function postPosts(array, destination, template) {
-  for (let i = 0; i < array.length; i++) {
-    const post = document.importNode(template, true);
-    destination.append(post);
+function formatDate(string) {
+  let formattedString;
+  if (string.indexOf("-") === 4 || string.indexOf("/") === 4) {
+    let year = string.substr(0, 4);
+    let day = string.substr(8, 2);
+    formattedString = string.replace(day, year);
+    formattedString = formattedString.replace(year, day);
   }
-  fillPosts(array);
+  return formattedString;
 }
+
 function fillPosts(array) {
   for (let i = 0; i < array.length; i++) {
     const element = array[i];
     document.querySelectorAll(".post-meta__author")[i].innerHTML =
       element.author.name;
-    document.querySelectorAll(".post-meta__time")[i].innerHTML =
-      element.created;
+    document.querySelectorAll(".post-meta__time")[i].innerHTML = formatDate(
+      element.created
+    );
     document.querySelectorAll(".profile-pic")[i].src = element.author.image;
     document.querySelectorAll(".profile-pic")[i].alt = element.author.name;
 
@@ -84,6 +89,14 @@ function fillPosts(array) {
     document.querySelectorAll(".js-likes-counter")[i].innerHTML = element.likes;
   }
 }
+function postPosts(array, destination, template) {
+  for (let i = 0; i < array.length; i++) {
+    const post = document.importNode(template, true);
+    destination.append(post);
+  }
+  fillPosts(array);
+}
+
 function likeCounter(postArray, likeArray) {
   for (let i = 0; i < postArray.length; i++) {
     const element = postArray[i];
