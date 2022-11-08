@@ -75,13 +75,25 @@ function formatDate(string) {
 function fillPosts(array) {
   for (let i = 0; i < array.length; i++) {
     const element = array[i];
-    document.querySelectorAll(".post-meta__author")[i].innerHTML =
-      element.author.name;
+    let authorName = element.author.name;
+    document.querySelectorAll(".post-meta__author")[i].innerHTML = authorName;
     document.querySelectorAll(".post-meta__time")[i].innerHTML = formatDate(
       element.created
     );
-    document.querySelectorAll(".profile-pic")[i].src = element.author.image;
-    document.querySelectorAll(".profile-pic")[i].alt = element.author.name;
+    if (element.author.image === null || element.author.image === undefined) {
+      let div = document.createElement("div");
+      div.classList.add(".profile-pic");
+      div.innerHTML = authorName.substr(0, 1);
+      div.innerHTML += authorName.substr(authorName.indexOf(" ") + 1, 1);
+      document.querySelectorAll(".post-meta__icon")[i].innerHTML = ``;
+      document.querySelectorAll(".post-meta__icon")[i].append(div);
+    } else {
+      document.querySelectorAll(".post-meta__icon")[i].innerHTML = `<img
+      class="profile-pic"
+      src=${element.author.image}
+      alt=${authorName}
+    />`;
+    }
 
     document.querySelectorAll(".post__text")[i].innerHTML = element.content;
     document.querySelectorAll(".post__image img")[i].src = element.media;
