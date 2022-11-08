@@ -62,12 +62,30 @@ const posts = [
 ];
 
 const postsList = document.querySelector(".posts-list");
-const template = document.getElementsByTagName("template")[0].content;
+const postTemplate = document.getElementsByTagName("template")[0].content;
+
 function postPosts(array, destination, template) {
-  array.forEach((element) => {
+  for (let i = 0; i < array.length; i++) {
     const post = document.importNode(template, true);
     destination.append(post);
-  });
+  }
+  fillPosts(array);
+}
+function fillPosts(array) {
+  for (let i = 0; i < array.length; i++) {
+    const element = array[i];
+    document.querySelectorAll(".post-meta__author")[i].innerHTML =
+      element.author.name;
+    document.querySelectorAll(".post-meta__time")[i].innerHTML =
+      element.created;
+    document.querySelectorAll(".profile-pic")[i].src = element.author.image;
+    document.querySelectorAll(".profile-pic")[i].alt = element.author.name;
+
+    document.querySelectorAll(".post__text")[i].innerHTML = element.content;
+    document.querySelectorAll(".post__image img")[i].src = element.media;
+    document.querySelectorAll(".post__text")[i].innerHTML = element.content;
+    document.querySelectorAll(".js-likes-counter")[i].innerHTML = element.likes;
+  }
 }
 
-postPosts(posts, postsList, template);
+postPosts(posts, postsList, postTemplate);
