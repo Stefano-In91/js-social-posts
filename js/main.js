@@ -61,9 +61,6 @@ const posts = [
   },
 ];
 
-const postsList = document.querySelector(".posts-list");
-const postTemplate = document.getElementsByTagName("template")[0].content;
-
 function postPosts(array, destination, template) {
   for (let i = 0; i < array.length; i++) {
     const post = document.importNode(template, true);
@@ -87,5 +84,29 @@ function fillPosts(array) {
     document.querySelectorAll(".js-likes-counter")[i].innerHTML = element.likes;
   }
 }
+function likeCounter(postArray, likeArray) {
+  for (let i = 0; i < postArray.length; i++) {
+    const element = postArray[i];
+    const likeBtn = document.querySelectorAll(".js-like-button")[i];
+    likeBtn.addEventListener("click", function () {
+      if (!likeBtn.classList.contains("like-button--liked")) {
+        likeBtn.classList.add("like-button--liked");
+        likeArray.push(element);
+        document.querySelectorAll(".js-likes-counter")[i].innerHTML =
+          element.likes++ + 1;
+      } else {
+        likeBtn.classList.remove("like-button--liked");
+        likeArray.splice(likeArray.indexOf(element), 1);
+        document.querySelectorAll(".js-likes-counter")[i].innerHTML =
+          element.likes-- - 1;
+      }
+    });
+  }
+  return likeArray;
+}
 
+const postsList = document.querySelector(".posts-list");
+const postTemplate = document.getElementsByTagName("template")[0].content;
 postPosts(posts, postsList, postTemplate);
+const likedPosts = [];
+likeCounter(posts, likedPosts);
