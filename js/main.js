@@ -2,7 +2,7 @@ const posts = [
   {
     id: 1,
     content:
-      "Placeat libero ipsa nobis ipsum quibusdam quas harum ut. Distinctio minima iusto. Ad ad maiores et sint voluptate recusandae architecto. Et nihil ullam aut alias.",
+      "1Placeat libero ipsa nobis ipsum quibusdam quas harum ut. Distinctio minima iusto. Ad ad maiores et sint voluptate recusandae architecto. Et nihil ullam aut alias.",
     media: "https://unsplash.it/600/300?image=171",
     author: {
       name: "Phil Mangione",
@@ -14,7 +14,7 @@ const posts = [
   {
     id: 2,
     content:
-      "Placeat libero ipsa nobis ipsum quibusdam quas harum ut. Distinctio minima iusto. Ad ad maiores et sint voluptate recusandae architecto. Et nihil ullam aut alias.",
+      "2Placeat libero ipsa nobis ipsum quibusdam quas harum ut. Distinctio minima iusto. Ad ad maiores et sint voluptate recusandae architecto. Et nihil ullam aut alias.",
     media: "https://unsplash.it/600/400?image=112",
     author: {
       name: "Sofia Perlari",
@@ -26,7 +26,7 @@ const posts = [
   {
     id: 3,
     content:
-      "Placeat libero ipsa nobis ipsum quibusdam quas harum ut. Distinctio minima iusto. Ad ad maiores et sint voluptate recusandae architecto. Et nihil ullam aut alias.",
+      "3Placeat libero ipsa nobis ipsum quibusdam quas harum ut. Distinctio minima iusto. Ad ad maiores et sint voluptate recusandae architecto. Et nihil ullam aut alias.",
     media: "https://unsplash.it/600/400?image=234",
     author: {
       name: "Chiara Passaro",
@@ -38,7 +38,7 @@ const posts = [
   {
     id: 4,
     content:
-      "Placeat libero ipsa nobis ipsum quibusdam quas harum ut. Distinctio minima iusto. Ad ad maiores et sint voluptate recusandae architecto. Et nihil ullam aut alias.",
+      "4Placeat libero ipsa nobis ipsum quibusdam quas harum ut. Distinctio minima iusto. Ad ad maiores et sint voluptate recusandae architecto. Et nihil ullam aut alias.",
     media: "https://unsplash.it/600/400?image=24",
     author: {
       name: "Luca Formicola",
@@ -50,7 +50,7 @@ const posts = [
   {
     id: 5,
     content:
-      "Placeat libero ipsa nobis ipsum quibusdam quas harum ut. Distinctio minima iusto. Ad ad maiores et sint voluptate recusandae architecto. Et nihil ullam aut alias.",
+      "5Placeat libero ipsa nobis ipsum quibusdam quas harum ut. Distinctio minima iusto. Ad ad maiores et sint voluptate recusandae architecto. Et nihil ullam aut alias.",
     media: "https://unsplash.it/600/400?image=534",
     author: {
       name: "Alessandro Sainato",
@@ -66,76 +66,72 @@ const posts = [
 -----------*/
 // Formatta data se la prima parte della stringa è l'anno(4cifre)
 function formatDate(string) {
-  let formattedString;
   if (string.indexOf("-") === 4 || string.indexOf("/") === 4) {
+    let formattedString;
     let year = string.substr(0, 4);
     let day = string.substr(8, 2);
     formattedString = string.replace(day, year);
     formattedString = formattedString.replace(year, day);
+    return formattedString;
   }
-  return formattedString;
 }
 // Riempie i post già creati con i dati dell'array oggetti, chiama formattazione date
-function fillPosts(array) {
-  for (let i = 0; i < array.length; i++) {
-    const element = array[i];
-    let authorName = element.author.name;
-    document.querySelectorAll(".post-meta__author")[i].innerHTML = authorName;
+function fillPost(postArray, index) {
+  const element = postArray[index];
+  let authorName = element.author.name;
+  document.querySelectorAll(".post-meta__author")[index].innerHTML = authorName;
 
-    document.querySelectorAll(".post-meta__time")[i].innerHTML = formatDate(
-      element.created
-    );
-    // Se trova un elemento mancante nelle immagini, sostituisce con iniziali Nome
-    if (element.author.image === null || element.author.image === undefined) {
-      let authorInitials = authorName.substr(0, 1);
-      authorInitials += authorName.substr(authorName.indexOf(" ") + 1, 1);
-      let div = document.createElement("div");
-      div.classList.add(".profile-pic");
-      div.innerHTML = authorInitials;
-      document.querySelectorAll(".post-meta__icon")[i].innerHTML = ``;
-      document.querySelectorAll(".post-meta__icon")[i].append(div);
-    } // Altrimenti setta l'innerHTML come da template
-    else {
-      document.querySelectorAll(".post-meta__icon")[i].innerHTML = `<img
+  document.querySelectorAll(".post-meta__time")[index].innerHTML = formatDate(
+    element.created
+  );
+  // Se trova un elemento mancante nelle immagini, sostituisce con iniziali Nome
+  if (element.author.image === null || element.author.image === undefined) {
+    let authorInitials = authorName.substr(0, 1);
+    authorInitials += authorName.substr(authorName.indexOf(" ") + 1, 1);
+    document.querySelectorAll(".post-meta__icon")[index].innerHTML = `<div
+      class="profile-pic">
+      ${authorInitials}</div>`;
+  } // Altrimenti setta l'innerHTML come da template
+  else {
+    document.querySelectorAll(".post-meta__icon")[index].innerHTML = `<img
       class="profile-pic"
       src=${element.author.image}
       alt=${authorName}
     />`;
-    }
+  }
 
-    document.querySelectorAll(".post__image img")[i].src = element.media;
-    document.querySelectorAll(".post__text")[i].innerHTML = element.content;
-    document.querySelectorAll(".js-likes-counter")[i].innerHTML = element.likes;
-  }
-}
-// Crea post nella pagina clonando il template, chiama la funzione per aggiornarne i dati
-function postPosts(array, destination, template) {
-  for (let i = 0; i < array.length; i++) {
-    const post = document.importNode(template, true);
-    destination.append(post);
-  }
-  fillPosts(array);
+  document.querySelectorAll(".post__image img")[index].src = element.media;
+  document.querySelectorAll(".post__text")[index].innerHTML = element.content;
+  document.querySelectorAll(".js-likes-counter")[index].innerHTML =
+    element.likes;
 }
 // Aggiunge event listener sui bottoni della pagina
-function likeCounter(postArray, likeArray) {
-  for (let i = 0; i < postArray.length; i++) {
-    const element = postArray[i];
-    const likeBtn = document.querySelectorAll(".js-like-button")[i];
-    likeBtn.addEventListener("click", function () {
-      if (!likeBtn.classList.contains("like-button--liked")) {
-        likeBtn.classList.add("like-button--liked");
-        likeArray.push(element);
-        document.querySelectorAll(".js-likes-counter")[i].innerHTML =
-          ++element.likes;
-      } else {
-        likeBtn.classList.remove("like-button--liked");
-        likeArray.splice(likeArray.indexOf(element), 1);
-        document.querySelectorAll(".js-likes-counter")[i].innerHTML =
-          --element.likes;
-      }
-    });
-  }
+function addLikeCounter(postArray, index, likeArray) {
+  const element = postArray[index];
+  const likeBtn = document.querySelectorAll(".js-like-button")[index];
+  likeBtn.addEventListener("click", function () {
+    if (!likeBtn.classList.contains("like-button--liked")) {
+      likeBtn.classList.add("like-button--liked");
+      likeArray.push(element);
+      document.querySelectorAll(".js-likes-counter")[index].innerHTML =
+        ++element.likes;
+    } else {
+      likeBtn.classList.remove("like-button--liked");
+      likeArray.splice(likeArray.indexOf(element), 1);
+      document.querySelectorAll(".js-likes-counter")[index].innerHTML =
+        --element.likes;
+    }
+  });
   return likeArray;
+}
+// Crea post nella pagina clonando il template, chiama le funzioni per aggiornarne dati
+function postPosts(postArray, destination, template, likeArray) {
+  for (let i = 0; i < postArray.length; i++) {
+    const post = document.importNode(template, true);
+    destination.append(post);
+    fillPost(postArray, i);
+    addLikeCounter(postArray, i, likeArray);
+  }
 }
 
 /*-----------
@@ -144,6 +140,5 @@ function likeCounter(postArray, likeArray) {
 // Inizializzazione target e counter, invocazione funzioni
 const postsList = document.querySelector(".posts-list");
 const postTemplate = document.getElementsByTagName("template")[0].content;
-postPosts(posts, postsList, postTemplate);
 const likedPosts = [];
-likeCounter(posts, likedPosts);
+postPosts(posts, postsList, postTemplate, likedPosts);
