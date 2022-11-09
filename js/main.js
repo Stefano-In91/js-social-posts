@@ -108,17 +108,19 @@ function fillPost(target, postArray, index) {
     .setAttribute(`data-postid`, element.id);
 }
 // Aggiunge event listener sui bottoni della pagina
-function addLikeCounter(target, postArray, index, likeArray) {
+function addLikeCounter(postArray, index, likeArray) {
   const element = postArray[index];
-  const likeBtn = target.querySelector(".js-like-button");
+  const likeBtn = document.querySelectorAll(".js-like-button")[index];
   likeBtn.addEventListener("click", function () {
     if (!likeBtn.classList.contains("like-button--liked")) {
       likeBtn.classList.add("like-button--liked");
-      target.querySelector(".js-likes-counter").innerHTML = ++element.likes;
+      document.querySelectorAll(".js-likes-counter")[index].innerHTML =
+        ++element.likes;
       likeArray.push(element.id);
     } else {
       likeBtn.classList.remove("like-button--liked");
-      target.querySelector(".js-likes-counter").innerHTML = --element.likes;
+      document.querySelectorAll(".js-likes-counter")[index].innerHTML =
+        --element.likes;
       likeArray.splice(likeArray.indexOf(element.id), 1);
     }
   });
@@ -129,8 +131,8 @@ function postPosts(postArray, destination, template, likeArray) {
   for (let i = 0; i < postArray.length; i++) {
     const post = template.cloneNode(true);
     fillPost(post, postArray, i);
-    addLikeCounter(post, postArray, i, likeArray);
     destination.append(post);
+    addLikeCounter(postArray, i, likeArray);
   }
 }
 
