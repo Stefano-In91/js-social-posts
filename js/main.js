@@ -76,53 +76,50 @@ function formatDate(string) {
   }
 }
 // Riempie i post già creati con i dati dell'array oggetti, chiama formattazione date
-function fillPost(postArray, index) {
+function fillPost(target, postArray, index) {
   const element = postArray[index];
   let authorName = element.author.name;
-  document.querySelectorAll(".post-meta__author")[index].innerHTML = authorName;
+  target.querySelector(".post-meta__author").innerHTML = authorName;
 
-  document.querySelectorAll(".post-meta__time")[index].innerHTML = formatDate(
+  target.querySelector(".post-meta__time").innerHTML = formatDate(
     element.created
   );
   // Se trova un elemento mancante nelle immagini, sostituisce con iniziali Nome
   if (element.author.image === null || element.author.image === undefined) {
     let authorInitials = authorName.substr(0, 1);
     authorInitials += authorName.substr(authorName.indexOf(" ") + 1, 1);
-    document.querySelectorAll(".post-meta__icon")[index].innerHTML = `<div
+    target.querySelector(".post-meta__icon").innerHTML = `<div
       class="profile-pic">
       ${authorInitials}</div>`;
   } // Altrimenti setta l'innerHTML come da template
   else {
-    document.querySelectorAll(".post-meta__icon")[index].innerHTML = `<img
+    target.querySelector(".post-meta__icon").innerHTML = `<img
       class="profile-pic"
       src=${element.author.image}
       alt=${authorName}
     />`;
   }
 
-  document.querySelectorAll(".post__image img")[index].src = element.media;
-  document.querySelectorAll(".post__text")[index].innerHTML = element.content;
-  document.querySelectorAll(".js-likes-counter")[index].innerHTML =
-    element.likes;
-  document
-    .querySelectorAll(".js-like-button")
-    [index].setAttribute(`data-postid`, element.id);
+  target.querySelector(".post__image img").src = element.media;
+  target.querySelector(".post__text").innerHTML = element.content;
+  target.querySelector(".js-likes-counter").innerHTML = element.likes;
+  target
+    .querySelector(".js-like-button")
+    .setAttribute(`data-postid`, element.id);
 }
 // Aggiunge event listener sui bottoni della pagina
-function addLikeCounter(postArray, index, likeArray) {
+function addLikeCounter(target, postArray, index, likeArray) {
   const element = postArray[index];
-  const likeBtn = document.querySelectorAll(".js-like-button")[index];
+  const likeBtn = target.querySelector(".js-like-button");
   likeBtn.addEventListener("click", function () {
     if (!likeBtn.classList.contains("like-button--liked")) {
       likeBtn.classList.add("like-button--liked");
-      document.querySelectorAll(".js-likes-counter")[index].innerHTML =
-        ++element.likes;
-      likeArray.push(element);
+      target.querySelector(".js-likes-counter").innerHTML = ++element.likes;
+      likeArray.push(element.id);
     } else {
       likeBtn.classList.remove("like-button--liked");
-      document.querySelectorAll(".js-likes-counter")[index].innerHTML =
-        --element.likes;
-      likeArray.splice(likeArray.indexOf(element), 1);
+      target.querySelector(".js-likes-counter").innerHTML = --element.likes;
+      likeArray.splice(likeArray.indexOf(element.id), 1);
     }
   });
   return likeArray;
@@ -130,10 +127,10 @@ function addLikeCounter(postArray, index, likeArray) {
 // Crea post nella pagina clonando il template, chiama le funzioni per aggiornarne dati
 function postPosts(postArray, destination, template, likeArray) {
   for (let i = 0; i < postArray.length; i++) {
-    const post = document.importNode(template, true);
+    const post = template.cloneNode(true);
+    fillPost(post, postArray, i);
+    addLikeCounter(post, postArray, i, likeArray);
     destination.append(post);
-    fillPost(postArray, i);
-    addLikeCounter(postArray, i, likeArray);
   }
 }
 
