@@ -103,7 +103,6 @@ function fillPosts(array) {
     />`;
     }
 
-    document.querySelectorAll(".post__text")[i].innerHTML = element.content;
     document.querySelectorAll(".post__image img")[i].src = element.media;
     document.querySelectorAll(".post__text")[i].innerHTML = element.content;
     document.querySelectorAll(".js-likes-counter")[i].innerHTML = element.likes;
@@ -127,12 +126,12 @@ function likeCounter(postArray, likeArray) {
         likeBtn.classList.add("like-button--liked");
         likeArray.push(element);
         document.querySelectorAll(".js-likes-counter")[i].innerHTML =
-          element.likes++ + 1;
+          ++element.likes;
       } else {
         likeBtn.classList.remove("like-button--liked");
         likeArray.splice(likeArray.indexOf(element), 1);
         document.querySelectorAll(".js-likes-counter")[i].innerHTML =
-          element.likes-- - 1;
+          --element.likes;
       }
     });
   }
