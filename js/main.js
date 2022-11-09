@@ -72,6 +72,8 @@ function formatDate(string) {
     let day = string.substr(8, 2);
     formattedString = string.replace(day, year);
     formattedString = formattedString.replace(year, day);
+    formattedString = formattedString.replace("-", "/");
+    formattedString = formattedString.replace("-", "/");
     return formattedString;
   }
 }
