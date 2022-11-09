@@ -106,6 +106,7 @@ function fillPost(target, postArray, index) {
   target
     .querySelector(".js-like-button")
     .setAttribute(`data-postid`, element.id);
+  target.querySelector(".js-likes-counter").id = `like-counter-${element.id}`;
 }
 // Aggiunge event listener sui bottoni della pagina
 function addLikeCounter(postArray, index, likeArray) {
@@ -116,15 +117,14 @@ function addLikeCounter(postArray, index, likeArray) {
       likeBtn.classList.add("like-button--liked");
       document.querySelectorAll(".js-likes-counter")[index].innerHTML =
         ++element.likes;
-      likeArray.push(element.id);
+      likeArray.push(element);
     } else {
       likeBtn.classList.remove("like-button--liked");
       document.querySelectorAll(".js-likes-counter")[index].innerHTML =
         --element.likes;
-      likeArray.splice(likeArray.indexOf(element.id), 1);
+      likeArray.splice(likeArray.indexOf(element), 1);
     }
   });
-  return likeArray;
 }
 // Crea post nella pagina clonando il template, chiama le funzioni per aggiornarne dati
 function postPosts(postArray, destination, template, likeArray) {
