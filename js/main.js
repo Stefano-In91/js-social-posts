@@ -104,6 +104,9 @@ function fillPost(postArray, index) {
   document.querySelectorAll(".post__text")[index].innerHTML = element.content;
   document.querySelectorAll(".js-likes-counter")[index].innerHTML =
     element.likes;
+  document
+    .querySelectorAll(".js-like-button")
+    [index].setAttribute(`data-postid`, element.id);
 }
 // Aggiunge event listener sui bottoni della pagina
 function addLikeCounter(postArray, index, likeArray) {
