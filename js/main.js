@@ -112,14 +112,14 @@ function addLikeCounter(postArray, index, likeArray) {
   likeBtn.addEventListener("click", function () {
     if (!likeBtn.classList.contains("like-button--liked")) {
       likeBtn.classList.add("like-button--liked");
-      likeArray.push(element);
       document.querySelectorAll(".js-likes-counter")[index].innerHTML =
         ++element.likes;
+      likeArray.push(element);
     } else {
       likeBtn.classList.remove("like-button--liked");
-      likeArray.splice(likeArray.indexOf(element), 1);
       document.querySelectorAll(".js-likes-counter")[index].innerHTML =
         --element.likes;
+      likeArray.splice(likeArray.indexOf(element), 1);
     }
   });
   return likeArray;
