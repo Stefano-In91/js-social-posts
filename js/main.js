@@ -144,5 +144,6 @@ function postPosts(postArray, destination, template, likeArray) {
 // Inizializzazione target e counter, invocazione funzioni
 const postsList = document.querySelector(".posts-list");
 const postTemplate = document.getElementsByTagName("template")[0].content;
+
 const likedPosts = [];
 postPosts(posts, postsList, postTemplate, likedPosts);
